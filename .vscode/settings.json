@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "tuple": "cpp",
+        "iostream": "cpp",
+        "utility": "cpp",
+        "vector": "cpp"
+    },
+    "editor.formatOnSave": true,
+    "clang.executable": "clang-8.0",
+    "clang-format.executable": "clang-format",
+}

@@ -3,6 +3,7 @@ FROM conanio/clang8
 
 USER root
 RUN apt-get update
+RUN apt-get install gdb gdbserver -y
 
 RUN apt-get clean autoclean && \
     apt-get autoremove -y && \
@@ -22,10 +23,5 @@ RUN mkdir /home/develop/build
 RUN chmod a+rwx /home/develop/build
 RUN chmod a+rwx /home/develop/.conan
 
-#VOLUME "/home/develop/cpputil"
 WORKDIR "/home/develop/build"
-
-
-# Start from a Bash prompt
-#CMD [ "/bin/bash" ]
 

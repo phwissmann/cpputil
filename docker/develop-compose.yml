@@ -4,7 +4,7 @@ services:
   ##### the develop image you've build
   ### don't forget to open ports for your app
   dev-image:
-    image: conan-clang-cmake
+    image: conan-clang-cmake-gdb
     ports:
       - "2000:2000"
       - "50010:50010"

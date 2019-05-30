@@ -27,7 +27,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "command": "docker exec -it devenv make",
+            "command": "docker exec -it devenv cmake --build /home/develop/build",
             "problemMatcher": [
                 "$gcc"
             ]
@@ -49,7 +49,7 @@
             "label": "start-gdbserver",
             "type": "shell",
             // not using -it so that it can be a preLaunchTask
-            "command": "docker exec -d devenv  gdbserver :2000 build/bin/your_app",
+            "command": "docker exec -d devenv  gdbserver :2000 /home/develop/build/bin/tests",
             "problemMatcher": []
         },
         {
@@ -64,14 +64,14 @@
             "label": "run app",
             "type": "shell",
             // not using -it so that it can be a preLaunchTask
-            "command": "docker exec -d devenv  build/bin/your_app",
+            "command": "docker exec -d devenv /home/develop/build/bin/tests",
             "problemMatcher": []
         },
         {
             "label": "stop app",
             "type": "shell",
             // not using -it so that it can be a preLaunchTask
-            "command": "docker exec -d devenv  pkill your_app",
+            "command": "docker exec -d devenv  pkill tests",
             "problemMatcher": []
         }
     ]

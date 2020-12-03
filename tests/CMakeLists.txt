@@ -6,7 +6,7 @@ add_executable(tests
 
 target_compile_options(tests 
 PRIVATE
--std=c++17)
+-std=c++20)
 
 target_include_directories(tests
 PRIVATE

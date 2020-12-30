@@ -11,7 +11,7 @@ endif()
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 
 conan_cmake_run(CONANFILE conanfile.txt
-                SETTINGS compiler.cppstd=20 compiler=gcc compiler.version=10
+                SETTINGS compiler.cppstd=17 compiler=gcc compiler.version=10
                 BASIC_SETUP
                 CMAKE_TARGETS
                 BUILD missing

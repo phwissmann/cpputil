@@ -10,7 +10,9 @@ services:
     container_name: devenv
     user: ${USER_ID}:${GROUP_ID}
     volumes:
-      - "${HOST_SRC_FOLDER}:/mnt/src:rw"
-      - "${HOST_BUILD_FOLDER}:/mnt/build:rw"
-      - "${HOST_CONAN_FOLDER}/data:/root/.conan/data:rw"
+      # host volumes are relative to the docker compose file location
+      - "../:/mnt/src:rw"
+      - "../../cpputil_build:/mnt/build:rw"
+      # might not hold true if users uses a custom conan folder
+      - "${HOME}/.conan/data:/root/.conan/data:rw"
     working_dir: /mnt/build

@@ -4,44 +4,33 @@ from conans import ConanFile, CMake, tools
 class CpputilConan(ConanFile):
     name = "cpputil"
     version = "0.1"
-    license = "<Put the package license here>"
-    author = "<Put your name here> <And your email here>"
-    url = "<Package recipe repository url here, for issues about the package>"
-    description = "<Description of Cpputil here>"
-    topics = ("<Put some tag here>", "<here>", "<and here>")
+    license = "MIT License"
+    author = "Philipp Wissmann"
+    url = "https://github.com/phwissmann/cpputil"
+    description = "C++ Development Utilities"
+    topics = ("Utilities")
     settings = "os", "compiler", "build_type", "arch"
     options = {"shared": [True, False]}
     default_options = {"shared": False}
     generators = "cmake"
+    requires = "gtest/1.8.1"
+    build_policy = "missing"
+    exports_sources = "include/*"
+    no_copy_source = True
 
     def source(self):
-        self.run("git clone https://github.com/phwissmann/cpputil.git")
-        # This small hack might be useful to guarantee proper /MT /MD linkage
-        # in MSVC if the packaged project doesn't have variables to set it
-        # properly
-        # tools.replace_in_file("CMakeLists.txt", "PROJECT(HelloWorld)",
-        #                       '''PROJECT(HelloWorld)
-        #                             include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-        #                             conan_basic_setup()''')
+        self.run("git clone https://github.com/phwissmann/cpputil")
 
-    #def build(self):
-        # cmake = CMake(self)
-        # cmake.configure(source_folder="hello")
-        # cmake.build()
+    def build(self):
+        cmake = CMake(self)
+        cmake.configure(source_folder="cpputil")
+        cmake.build()
+        cmake.test()
 
-        # Explicit way:
-        # self.run('cmake %s/hello %s'
-        #          % (self.source_folder, cmake.command_line))
-        # self.run("cmake --build . %s" % cmake.build_config)
 
     def package(self):
-        self.copy("*.h", dst="include", src="hello")
-        # self.copy("*hello.lib", dst="lib", keep_path=False)
-        # self.copy("*.dll", dst="bin", keep_path=False)
-        # self.copy("*.so", dst="lib", keep_path=False)
-        # self.copy("*.dylib", dst="lib", keep_path=False)
-        # self.copy("*.a", dst="lib", keep_path=False)
+        self.copy("*.h", dst="include/cpputil", src="cpputil/src")
 
-    # def package_info(self):
-    #     self.cpp_info.libs = ["hello"]
+    def package_id(self):
+        self.info.header_only()
 

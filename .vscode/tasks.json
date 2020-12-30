@@ -4,19 +4,19 @@
         {
             "label": "start develop env",
             "type": "shell",
-            "command": "docker-compose -f docker/develop-compose.yml run --service-ports --name devenv dev-image bash",
+            "command": "USER_ID=$(id -u) GROUP_ID=$(id -g) docker-compose -f docker/develop-compose.yml --env-file docker/.env up -d dev-image",
             "problemMatcher": []
         },
         {
             "label": "stop develop env",
             "type": "shell",
-            "command": "docker-compose -f docker/develop-compose.yml down",
+            "command": "docker-compose -f docker/develop-compose.yml --env-file docker/.env down",
             "problemMatcher": []
         },
         {
             "label": "cmake generate",
             "type": "shell",
-            "command": "docker exec -it devenv cmake -H/home/develop/src -B/home/develop/build -DCMAKE_BUILD_TYPE=Debug",
+            "command": "cmake -H/mnt/src -B/mnt/build -DCMAKE_BUILD_TYPE=Debug",
             "problemMatcher": []
         },
         {
@@ -27,7 +27,7 @@
                 "kind": "build",
                 "isDefault": true
             },
-            "command": "docker exec -it devenv cmake --build /home/develop/build",
+            "command": "cmake --build /mnt/build",
             "problemMatcher": [
                 "$gcc"
             ]
@@ -35,43 +35,28 @@
         {
             "label": "clean",
             "type": "shell",
-            "command": "docker exec -it devenv make clean",
+            "command": "rm -rf /mnt/build/*",
             "problemMatcher": [
                 "$gcc"
             ]
         },
         {
-            "label": "make package",
-            "type": "shell",
-            "command": "docker exec -it devenv make package",
-        },
-        {
             "label": "start-gdbserver",
             "type": "shell",
-            // not using -it so that it can be a preLaunchTask
-            "command": "docker exec -d devenv  gdbserver :2000 /home/develop/build/bin/tests",
+            "command": "docker exec -d devenv gdbserver :2000 bin/tests",
             "problemMatcher": []
         },
         {
-            "label": "build develop image",
+            "label": "Run Executable",
             "type": "shell",
             // not using -it so that it can be a preLaunchTask
-            "command": "docker build -f Dockerfile.develop -t your-company/your-project/develop .",
+            "command": "bin/tests",
             "problemMatcher": []
         },
         {
-            // running without debugging
-            "label": "run app",
+            "label": "Stop Executable",
             "type": "shell",
-            // not using -it so that it can be a preLaunchTask
-            "command": "docker exec -d devenv /home/develop/build/bin/tests",
-            "problemMatcher": []
-        },
-        {
-            "label": "stop app",
-            "type": "shell",
-            // not using -it so that it can be a preLaunchTask
-            "command": "docker exec -d devenv  pkill tests",
+            "command": "pkill tests",
             "problemMatcher": []
         }
     ]

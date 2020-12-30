@@ -1,16 +1,16 @@
-
-version: '2'
+version: '3.5'
 services:
-  ##### the develop image you've build
-  ### don't forget to open ports for your app
   dev-image:
-    image: conan-clang-cmake-gdb
+    image: conan-gcc10-cmake-gdb
     ports:
       - "2000:2000"
       - "50010:50010"
     privileged: true
+    tty: true
     container_name: devenv
-# mapping your project folder (.) to /home/develop/project    
+    user: ${USER_ID}:${GROUP_ID}
     volumes:
-      - "${PWD}:/home/develop/src"
-      - "/mnt/build:/home/develop/build:rw"
+      - "${HOST_SRC_FOLDER}:/mnt/src:rw"
+      - "${HOST_BUILD_FOLDER}:/mnt/build:rw"
+      - "${HOST_CONAN_FOLDER}/data:/root/.conan/data:rw"
+    working_dir: /mnt/build

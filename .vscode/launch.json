@@ -8,14 +8,21 @@
             "miDebuggerServerAddress": "localhost:2000",
             "preLaunchTask": "start-gdbserver",
             "miDebuggerPath": "/usr/bin/gdb",
-            "program": "/mnt/build/bin/tests",
+            "program": "${workspaceFolder}/../cpputil_build/bin/tests",
             "targetArchitecture": "x64",
             "args": [],
             "stopAtEntry": true,
             "cwd": "${workspaceRoot}",
             "sourceFileMap": {
-                "/home/develop/src": "${workspaceRoot}"
+                "/mnt/src": "${workspaceRoot}"
             },
+            "setupCommands": [
+                {
+                    "description": "Enable pretty-printing for gdb",
+                    "text": "-enable-pretty-printing",
+                    "ignoreFailures": true,
+                }
+            ],
             "environment": []
         }
     ]

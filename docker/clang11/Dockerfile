@@ -1,5 +1,5 @@
 # Check http://releases.llvm.org/download.html#8.0.0 for the latest available binaries
-FROM conanio/clang8
+FROM conanio/clang11
 
 USER root
 RUN apt-get update
@@ -14,14 +14,18 @@ RUN echo "develop   ALL=(ALL:ALL) ALL" >> /etc/sudoers
 
 
 EXPOSE 2000
-USER develop
 
-RUN mkdir /home/develop/.conan
-RUN mkdir /home/develop/src
-RUN mkdir /home/develop/build
+RUN mkdir /mnt/src
+RUN chmod -R a+rwx /mnt/src
 
-RUN chmod a+rwx /home/develop/build
-RUN chmod a+rwx /home/develop/.conan
+RUN mkdir /mnt/conan
+RUN chmod -R a+rwx /mnt/conan
 
-WORKDIR "/home/develop/build"
+RUN mkdir /mnt/build
+RUN chmod -R a+rwx /mnt/build
+
+
+WORKDIR /mnt
+
+CMD ["/bin/bash"]
 

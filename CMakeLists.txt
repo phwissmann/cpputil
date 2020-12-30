@@ -10,6 +10,8 @@ endif()
 
 include(${CMAKE_BINARY_DIR}/conan.cmake)
 
+include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
+
 conan_cmake_run(CONANFILE conanfile.txt
                 SETTINGS compiler.cppstd=17 compiler=gcc compiler.version=10
                 BASIC_SETUP
@@ -17,6 +19,9 @@ conan_cmake_run(CONANFILE conanfile.txt
                 BUILD missing
                 )
 
-include(${CMAKE_BINARY_DIR}/conanbuildinfo.cmake)
-
+enable_testing()
+add_test(NAME cpputil_tests
+        WORKING_DIRECTORY ${CMAKE_BINARY_DIR}/bin
+        COMMAND tests)
+        
 add_subdirectory(tests)

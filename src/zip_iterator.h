@@ -61,7 +61,9 @@ class TupleIterator {
 template <typename... Containers>
 class Zip {
  public:
-  using Iterators = TupleIterator<typename Containers::iterator...>;
+  template<typename Container>
+  using IteratorType = std::conditional_t<any_of_v<std::is_const, Containers...>, const_iterator_selector<Container>, iterator_selector<Container>>;
+  using Iterators = TupleIterator<typename IteratorType<Containers>::type...>;
 
   Zip(Containers&... containers)
       : m_BeginIterators(std::begin(containers)...),

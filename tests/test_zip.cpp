@@ -50,36 +50,45 @@ TEST(Zip, TupleIterator) {
   EXPECT_EQ(c, v1[0]);
 }
 
-TEST(Zip, vector_array) {
-  std::vector<int> v1(4);
-  v1[0] = 1;
-  v1[1] = 2;
-  v1[2] = 3;
-  v1[3] = 1;
+TEST(Zip, TupleIteratorFromConst) {
+  using valtype1 = int;
+  const std::vector<int> v1(4);
+  const std::vector<int> v2(4);
+  using IterType1 = std::vector<int>::const_iterator;
+  using IterType2 = std::vector<int>::const_iterator;
 
-  std::array<float, 4> v2;
-  // std::vector<float> v2(4);
-  v2[0] = 1.1f;
-  v2[1] = 2.1f;
-  v2[2] = 3.1f;
-  v2[3] = 1.1f;
+  TupleIterator<IterType1, IterType2> tuple_iterator(v1.begin(), v2.begin());
+}
+
+
+template<typename... Args>
+struct A{
+
+  A(Args &... ){
+    static_assert(cpputil::any_of<std::is_const, Args...>::value);
+  }
+};
+
+TEST(Zip, any_of_test) 
+{
+  static_assert(cpputil::any_of_v<std::is_const, const int, const int>);
+  static_assert(cpputil::any_of_v<std::is_const, int, const int>);
+  static_assert(!cpputil::any_of_v<std::is_const, int, int>);
+
+  int i;
+  const float const_i{0.0f};
+
+  A a(i, const_i);
+}
+
+TEST(Zip, vector_array) {
+   std::vector<int> v1 = {1, 2, 3, 4};
+
+   std::array<float, 4> v2{1.1f ,2.1f, 3.1f, 4.1f};
 
   using asf = n_th_type<1, double, int, char>::type;
-
   static_assert(std::is_same_v<asf, int>, "same type");
 
-  // static_assert(std::is_same_v<decltype(std::begin(v2)), int>, "asdf");
-  //   std::vector<int>::iterator it = v1.begin();
-  //   *it = 1;
-  //   int& val = *it;
-
-  //   std::tuple<std::vector<int>::iterator> t(it);
-  //   int& r = *std::get<std::vector<int>::iterator>(t);
-  //   r = 100;
-  //   EXPECT_EQ(v1[0], 100);
-
-  //   ZipImpl zipiter(v1, v2);
-  //   auto& [a, b] = zipiter.begin();
   int i = 0;
   for (auto& [a, b] : Zip(v1, v2)) {
     EXPECT_EQ(v2[i], b);
@@ -96,13 +105,9 @@ TEST(Zip, vector_array) {
 }
 
 TEST(Zip, vector_set) {
-  std::vector<int> v(3);
-  v[0] = 1;
-  v[1] = 2;
-  v[2] = 3;
+  const std::vector<int> v{1,2,3};
 
-  std::set<int> s(std::begin(v), std::end(v));
-
+  const std::set<int> s(std::begin(v), std::end(v));
   const bool b = same_size(v, s);
   EXPECT_TRUE(b);
 
@@ -112,12 +117,8 @@ TEST(Zip, vector_set) {
 }
 
 TEST(Zip, vector_different_size) {
-  std::vector<int> v(3);
-  v[0] = 1;
-  v[1] = 2;
-  v[2] = 3;
-
-  std::vector<int> s(std::begin(v), std::end(v) - 1);
+  const std::vector<int> v{1,2,3};
+  const std::vector<int> s(std::begin(v), std::end(v) - 1);
 
   EXPECT_FALSE(same_size(v, s));
 }

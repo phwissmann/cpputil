@@ -98,8 +98,6 @@ TEST(Zip, vector_array) {
 
     EXPECT_EQ(v1[i], a);
 
-    std::cout << i << ":\t" << v1[i] << "\t" << a << "\t" << v2[i] << "\t" << b
-              << std::endl;
     ++i;
   }
 }
